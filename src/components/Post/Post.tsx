@@ -1,16 +1,15 @@
-import { FormEvent, useState } from "react";
-import { PostType } from "../PostList/PostList";
+import { FormEvent, useContext, useState } from "react";
+import { AppContext } from "../../context/AppContext";
 
 type Props = {
   id: number;
   title: string;
-  updatePost: (post: PostType) => void;
-  deletePostByID: (id: number) => void;
 };
 
-export const Post = ({ id, title, updatePost, deletePostByID }: Props) => {
+export const Post = ({ id, title }: Props) => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [postTitle, setPostTitle] = useState(title);
+  const { updatePost, deletePostByID } = useContext(AppContext);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

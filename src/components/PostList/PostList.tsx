@@ -1,60 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Post } from "../Post/Post";
 import { PostForm } from "../PostForm/PostForm";
-
-export type PostType = {
-  id: number;
-  title: string;
-};
+import { AppContext } from "../../context/AppContext";
 
 export const PostList = () => {
-  const [posts, setPosts] = useState<PostType[]>([]);
-
-  const getPosts = async () => {
-    try {
-      const res = await fetch("https://dummyjson.com/posts");
-
-      if (!res.ok) throw new Error("Cannot fetch posts!");
-
-      const { posts } = await res.json();
-
-      if (posts) setPosts(posts);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addPost = (post: PostType) => setPosts((prev) => [...prev, post]);
-
-  const updatePost = (updatedPost: PostType) => {
-    setPosts((prev) =>
-      prev.map((post) => {
-        if (updatedPost.id !== post.id) return post;
-
-        return updatedPost;
-      })
-    );
-  };
-
-  const deletePostByID = (id: number) => {
-    setPosts((prev) => prev.filter((post) => post.id !== id));
-  };
-
-  useEffect(() => {
-    getPosts();
-  }, []);
+  const { posts } = useContext(AppContext);
 
   return posts.length > 0 ? (
     <>
-      <PostForm addPost={addPost} />
+      <PostForm />
       <ul>
         {posts.map((post) => (
-          <Post
-            key={post.id}
-            updatePost={updatePost}
-            deletePostByID={deletePostByID}
-            {...post}
-          />
+          <Post key={post.id} {...post} />
         ))}
       </ul>
     </>

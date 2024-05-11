@@ -1,12 +1,9 @@
-import { FormEvent, useState } from "react";
-import { PostType } from "../PostList/PostList";
+import { FormEvent, useContext, useState } from "react";
+import { AppContext } from "../../context/AppContext";
 
-type Props = {
-  addPost: (post: PostType) => void;
-};
-
-export const PostForm = ({ addPost }: Props) => {
+export const PostForm = () => {
   const [title, setTitle] = useState("");
+  const { addPost } = useContext(AppContext);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
