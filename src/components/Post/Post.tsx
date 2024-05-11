@@ -5,10 +5,10 @@ type Props = {
   id: number;
   title: string;
   updatePost: (post: PostType) => void;
-  deletePost: (id: number) => void;
+  deletePostByID: (id: number) => void;
 };
 
-export const Post = ({ id, title, updatePost, deletePost }: Props) => {
+export const Post = ({ id, title, updatePost, deletePostByID }: Props) => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [postTitle, setPostTitle] = useState(title);
 
@@ -39,12 +39,16 @@ export const Post = ({ id, title, updatePost, deletePost }: Props) => {
 
   const deletePost = async () => {
     try {
-      const res = await fetch(`https://dummyjson.com/posts/${id}`, {
+      const res = await fetch(`https://dummyjson.com/products/${id}`, {
         method: "DELETE",
       });
 
       if (!res.ok) throw new Error("Cannot delete post!");
+
       const post = await res.json();
+
+      // usunac z listy aktualnej
+      if (post) deletePostByID(post.id);
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +71,7 @@ export const Post = ({ id, title, updatePost, deletePost }: Props) => {
             </label>
             <button type="submit">Zapisz</button>
           </form>
-          <button onClick={deletePost}>Usuń</button>
+          <button onClick={deletePost}>USUŃ</button>
         </>
       )}
       {isReadOnly && (
